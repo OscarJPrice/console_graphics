@@ -1,0 +1,1 @@
+g++ -Ofast -I headers source/*.cpp -o main -std=c++17 -Wall
