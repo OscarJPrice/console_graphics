@@ -19,7 +19,7 @@ public:
      * 
      * @param str The string literal to construct the Str4 object from.
      */
-    inline constexpr const char* data() {
+    inline const char* data() {
         return bytes;
     }
 

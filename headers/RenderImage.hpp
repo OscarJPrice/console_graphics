@@ -5,7 +5,8 @@
 
 enum ColorMode {
     color8bit,
-    color24bit
+    color24bit, 
+    asciiGrayScale
 };
 
 /**
@@ -25,6 +26,11 @@ void renderImageToConsole(const ImageBuffer<N, M>& buffer, const ColorMode mode 
         int last_color = -1; 
         // Iterate over the columns of the image buffer.
         for(int k = 0; k < N; k++) {
+            if (mode == asciiGrayScale) {
+                // Print the intensity to the console.
+                std::cout << Intensity::get(buffer(k, i));
+                continue;
+            }
             int color; 
             if (mode == color24bit) {
                 // Convert the pixel to a 24 bit integer
@@ -35,7 +41,7 @@ void renderImageToConsole(const ImageBuffer<N, M>& buffer, const ColorMode mode 
             } 
             else {
                 // Convert the pixel to an 8 bit integer. See Pixel.h for more details.
-                color = pixelTo8bitColor(buffer(k, i));
+                color = Pixel::pixelTo8bitColor(buffer(k, i));
                 if (color != last_color) {
                     std::cout << bg_color8bit(color);
                 }

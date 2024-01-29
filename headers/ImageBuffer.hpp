@@ -177,6 +177,34 @@ public:
         return buffer[y][x];
     }
 
+    template<int n, int m>
+    constexpr ImageBuffer<n, m> downscaleAVG() {
+        ImageBuffer<n, m> newImage;
+        constexpr double scaleY = (double)M/(double)m, scaleX = (double)N/(double)n;
+        std::cout<< scaleY << " " << scaleX << std::endl;
+        for (int y = 0; y < m; y++) {
+            for (int x = 0; x < n; x++) {
+                double r = 0, g = 0, b = 0;
+                int count = 0;
+                for (int y1 = (int)(y*scaleY); y1 < (int)((y+1)*scaleY); y1++) {
+                    for (int x1 = (int)(x*scaleX); x1 < (int)((x+1)*scaleX); x1++) {
+                        r += (*this)(x1, y1).r;
+                        g += (*this)(x1, y1).g;
+                        b += (*this)(x1, y1).b;
+                        count++;
+                    }
+                }
+                newImage(x, y).r = (uint8_t)(r/count);
+                newImage(x, y).g = (uint8_t)(g/count);
+                newImage(x, y).b = (uint8_t)(b/count);
+            }
+        }
+        //return newImage;
+        return newImage;
+    }
+
+    
+
     /**
      * @brief Assignment operator overload for ImageBuffer class.
      * 
@@ -193,7 +221,7 @@ public:
     ImageBuffer& operator=(const ImageBuffer<n, m>& other) {
         for (int i = 0; i < N; i++ ) {
             for (int k = 0; k < M; k++) {
-                (*this)(i, k) = other((int)i*((double)n/N), (int)k*((double)m/M));
+                this(i, k) = other((int)(0.5 + i*((double)n/N)), (int)(0.5+k*((double)m/M)));
             }
         }
         return *this;
