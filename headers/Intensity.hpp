@@ -5,15 +5,14 @@ namespace Intensity {
     // This is a grading of ascii intensity levels
     static constexpr const char* levels[] = {
         " ",  
-        FAINT ".",
-        FAINT ":", 
+        ".",
         ":", 
         "-", 
         "=", 
-        BOLD "#", 
-        BOLD "%", 
-        BOLD "@",
-        WHITE_BG_BRIGHT " "
+        "#", 
+        "%", 
+        "@",
+        //WHITE_BG_BRIGHT " " ANSI_NORMAL
     };
     //obvious
     static constexpr int levels_size = sizeof(levels)/sizeof(const char*);
@@ -25,8 +24,7 @@ namespace Intensity {
      * @return The character representation of the intensity level.
      */
     static inline const char* get(double intensity) {
-        std::cout<<intensity<<std::endl;
-        return levels[(int)(intensity*levels_size)];
+        return levels[(int)(intensity*levels_size) *(intensity > 0) * (intensity < 1) + (intensity >= 1) * (levels_size - 1)];
     }
 
     /**

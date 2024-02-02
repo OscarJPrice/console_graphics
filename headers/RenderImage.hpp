@@ -26,18 +26,20 @@ void renderImageToConsole(const ImageBuffer<N, M>& buffer, const ColorMode mode 
         int last_color = -1; 
         // Iterate over the columns of the image buffer.
         for(int k = 0; k < N; k++) {
+            int color; 
             if (mode == asciiGrayScale) {
                 // Print the intensity to the console.
                 std::cout << Intensity::get(buffer(k, i));
-                continue;
             }
-            int color; 
-            if (mode == color24bit) {
+            else if (mode == color24bit) {
                 // Convert the pixel to a 24 bit integer
                 color = (int)(buffer(k, i).r) << 16 | (int)(buffer(k, i).g) << 8 | (int)(buffer(k, i)).b;
                 if (color != last_color) {
                     std::cout << bg_color24bit(buffer(k, i).r, buffer(k, i).g, buffer(k, i).b);
                 }
+                last_color = color;
+                std::cout << ' ';
+
             } 
             else {
                 // Convert the pixel to an 8 bit integer. See Pixel.h for more details.
@@ -45,10 +47,11 @@ void renderImageToConsole(const ImageBuffer<N, M>& buffer, const ColorMode mode 
                 if (color != last_color) {
                     std::cout << bg_color8bit(color);
                 }
+                last_color = color;
+                std::cout << ' ';
+
             }
-            last_color = color;
             // We just want to print a space character, the background is what matters.
-            std::cout << ' ';
         }
         // Reset the background color.
         std::cout << ANSI_NORMAL << '\n';
