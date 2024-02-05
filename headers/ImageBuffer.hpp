@@ -208,7 +208,6 @@ public:
     constexpr ImageBuffer<n, m> downscaleAVG() {
         ImageBuffer<n, m> newImage;
         constexpr double scaleY = (double)M/(double)m, scaleX = (double)N/(double)n;
-        std::cout<< scaleY << " " << scaleX << std::endl;
         for (int y = 0; y < m; y++) {
             for (int x = 0; x < n; x++) {
                 double r = 0, g = 0, b = 0;
@@ -227,6 +226,19 @@ public:
             }
         }
         //return newImage;
+        return newImage;
+    }
+
+public:
+    ImageBuffer<N, M> invert() {
+        ImageBuffer<N, M> newImage;
+        for (int y = 0; y < M; y++) {
+            for (int x = 0; x < N; x++) {
+                newImage(x, y).r = 0xff - buffer[y][x].r;
+                newImage(x, y).g = 0xff - buffer[y][x].g;
+                newImage(x, y).b = 0xff - buffer[y][x].b;
+            }
+        }
         return newImage;
     }
     
